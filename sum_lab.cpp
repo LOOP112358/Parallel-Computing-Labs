@@ -14,7 +14,7 @@ double get_time_s() {
 
 // 1. 平凡算法（链式累加）
 double sum_trivial(const vector<double>& a, int n) {
-    double total = 0.0;
+    double total = 0;
     for (int i = 0; i < n; i++) {
         total += a[i];
     }
@@ -23,13 +23,11 @@ double sum_trivial(const vector<double>& a, int n) {
 
 // 2. 优化算法：双路累加（利用超标量并行）
 double sum_dual_way(const vector<double>& a, int n) {
-    double sum1 = 0.0, sum2 = 0.0;
-    for (int i = 0; i < n / 2 * 2; i += 2) {
+    double sum1 = 0, sum2 = 0;
+    for (int i = 0; i < n ; i += 2) {
         sum1 += a[i];
         sum2 += a[i + 1];
     }
-    // 处理剩余的奇数项
-    if (n % 2 != 0) sum1 += a[n - 1];
     return sum1 + sum2;
 }
 
@@ -39,9 +37,6 @@ double sum_pairwise(vector<double> a, int n) {
         for (int i = 0; i < m / 2; i++) {
             a[i] = a[i * 2] + a[i * 2 + 1];
         }
-        if (m % 2 != 0) {
-            a[m / 2] = a[m - 1];
-        }
     }
     return a[0];
 }
@@ -49,7 +44,7 @@ double sum_pairwise(vector<double> a, int n) {
 void run_sum_test(int n) {
     cout << "--- 测试规模 N = " << n << " ---" << endl;
     vector<double> a(n);
-    for (int i = 0; i < n; i++) a[i] = i * 0.1;
+    for (int i = 0; i < n; i++) a[i] = i ;
 
     // 为了让计时更有说服力，重复计算 100 次
     int repeat = 100;
@@ -85,7 +80,7 @@ void run_sum_test(int n) {
 
 int main() {
     // 测试不同规模，建议测到 10^7 或 10^8 级别
-    vector<int> sizes = {10000, 1000000, 10000000};
+    vector<int> sizes = {1024, 16384, 131072, 1048576};
     for (int n : sizes) {
         run_sum_test(n);
     }
