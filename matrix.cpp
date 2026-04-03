@@ -20,15 +20,15 @@ void run_test(int n) {
     vector<double> vec_in(n), res_trivial(n, 0), res_opt(n, 0);
 
     for(int i = 0; i < n; i++) {
-        vec_in[i] = i * 0.5;
+        vec_in[i] = i ;
         for(int j = 0; j < n; j++) matrix[i][j] = i + j;
     }
 
     // 2. 平凡算法测试
     double start = get_time();
-    for (int j = 0; j < n; j++) {
-        for (int i = 0; i < n; i++) {
-            res_trivial[i] += matrix[i][j] * vec_in[j];
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            res_trivial[i] += matrix[j][i] * vec_in[j];
         }
     }
     double end = get_time();
@@ -36,9 +36,9 @@ void run_test(int n) {
 
     // 3. 优化算法测试
     start = get_time();
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            res_opt[i] += matrix[i][j] * vec_in[j];
+    for (int j = 0; j < n; j++) {
+        for (int i = 0; i < n; i++) {
+            res_opt[i] += matrix[j][i] * vec_in[j];
         }
     }
     end = get_time();
